@@ -5,6 +5,7 @@ import WorkStage from './components/WorkStage';
 import ProcessStage from './components/ProcessStage';
 import CompleteStage from './components/CompleteStage';
 import ControlPanel from './components/ControlPanel';
+import PreviewModal from './components/PreviewModal';
 import { AppState, AppStage, Selection, FillMode, VideoInfo } from './types';
 import { getVideoInfo, calculateTotalFrames, createVideoUrl, revokeVideoUrl } from './utils/video';
 import { createPreviewImage } from './utils/canvas';
@@ -212,25 +213,12 @@ function App() {
         displayedHeight
       );
 
-      // 显示预览（简化版本，实际应该用模态框）
-      const previewWindow = window.open('', '_blank');
-      if (previewWindow) {
-        previewWindow.document.write(`
-          <html>
-            <head><title>预览</title></head>
-            <body style="margin:0;display:flex;gap:10px;min-height:100vh;justify-content:center;align-items:center;background:#1a1a24;">
-              <div style="text-align:center;">
-                <img src="${appState.currentFrame}" style="max-width:45vw;max-height:90vh;" />
-                <p style="color:#e8e8f0;margin-top:10px;">处理前</p>
-              </div>
-              <div style="text-align:center;">
-                <img src="${previewImage}" style="max-width:45vw;max-height:90vh;" />
-                <p style="color:#e8e8f0;margin-top:10px;">处理后</p>
-              </div>
-            </body>
-          </html>
-        `);
-      }
+      // 显示预览模态框
+      setAppState((prev) => ({
+        ...prev,
+        showPreviewModal: true,
+        previewImage,
+      }));
     } catch (error) {
       console.error('预览失败:', error);
       alert('预览失败，请重试');
@@ -380,6 +368,15 @@ function App() {
     document.body.removeChild(a);
   }, [appState.processedVideoUrl]);
 
+  // 关闭预览模态框
+  const handleClosePreviewModal = useCallback(() => {
+    setAppState((prev) => ({
+      ...prev,
+      showPreviewModal: false,
+      previewImage: undefined,
+    }));
+  }, []);
+
   // 重置应用
   const handleReset = useCallback(() => {
     if (appState.videoUrl) {
@@ -407,6 +404,8 @@ function App() {
       },
       processedVideoUrl: null,
       videoFormat: undefined,
+      showPreviewModal: false,
+      previewImage: undefined,
       currentStep: 1,
     });
   }, [appState.videoUrl, appState.processedVideoUrl]);
@@ -491,6 +490,16 @@ function App() {
           />
         )}
       </main>
+
+      {/* 预览模态框 */}
+      {appState.showPreviewModal && appState.previewImage && (
+        <PreviewModal
+          isOpen={appState.showPreviewModal}
+          onClose={handleClosePreviewModal}
+          beforeImage={appState.currentFrame || ''}
+          afterImage={appState.previewImage}
+        />
+      )}
     </div>
   );
 }

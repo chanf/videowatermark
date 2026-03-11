@@ -40,4 +40,6 @@ export interface AppState {
   processedVideoUrl: string | null;
   videoFormat?: 'mp4' | 'webm';
   afterImage?: string | null;
+  showPreviewModal?: boolean;
+  previewImage?: string;
 }
