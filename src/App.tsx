@@ -21,6 +21,7 @@ function App() {
     fillMode: null,
     fillColor: '#000000',
     fillImage: null,
+    fillImageElement: null,
     videoInfo: null,
     processState: {
       currentFrame: 0,
@@ -110,10 +111,20 @@ function App() {
 
   // 处理图片上传
   const handleFillImageUpload = useCallback((imageData: string) => {
-    setAppState((prev) => ({
-      ...prev,
-      fillImage: imageData,
-    }));
+    // 将 base64 转换为 HTMLImageElement
+    const img = new Image();
+    img.onload = () => {
+      setAppState((prev) => ({
+        ...prev,
+        fillImage: imageData,
+        fillImageElement: img,
+      }));
+    };
+    img.onerror = () => {
+      console.error('填充图片加载失败');
+      alert('图片加载失败，请重试');
+    };
+    img.src = imageData;
   }, []);
 
   // 清除填充图片
@@ -121,6 +132,7 @@ function App() {
     setAppState((prev) => ({
       ...prev,
       fillImage: null,
+      fillImageElement: null,
     }));
   }, []);
 
@@ -208,7 +220,7 @@ function App() {
         adjustedSelection,
         appState.fillMode,
         appState.fillColor,
-        null,
+        appState.fillImageElement,
         displayedWidth,
         displayedHeight
       );
@@ -267,6 +279,7 @@ function App() {
         appState.selection,
         appState.fillMode,
         appState.fillColor,
+        appState.fillImageElement,
         (progress, currentFrame) => {
           console.log(`处理进度: ${progress.toFixed(1)}%, 帧: ${currentFrame}`);
           setAppState(prev => ({
@@ -327,7 +340,7 @@ function App() {
               adjustedSelection,
               appState.fillMode,
               appState.fillColor,
-              null,
+              appState.fillImageElement,
               displayedWidth,
               displayedHeight
             );
@@ -395,6 +408,7 @@ function App() {
       fillMode: null,
       fillColor: '#000000',
       fillImage: null,
+      fillImageElement: null,
       videoInfo: null,
       processState: {
         currentFrame: 0,

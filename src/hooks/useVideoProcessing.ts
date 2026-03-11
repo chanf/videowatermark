@@ -11,6 +11,7 @@ interface UseVideoProcessingReturn {
     selection: Selection,
     fillMode: FillMode,
     fillColor: string,
+    fillImage: HTMLImageElement | null,
     onProgress: (progress: number, currentFrame: number) => void,
     containerInfo?: { containerWidth: number; containerHeight: number; imageNaturalWidth: number; imageNaturalHeight: number }
   ) => Promise<string | null>;
@@ -38,6 +39,7 @@ export function useVideoProcessing(): UseVideoProcessingReturn {
     selection: Selection,
     fillMode: FillMode,
     fillColor: string,
+    fillImage: HTMLImageElement | null,
     onProgress: (progress: number, currentFrame: number) => void,
     containerInfo?: { containerWidth: number; containerHeight: number; imageNaturalWidth: number; imageNaturalHeight: number }
   ): Promise<string | null> => {
@@ -323,7 +325,7 @@ export function useVideoProcessing(): UseVideoProcessingReturn {
 
         // 应用填充效果
         if (scaledSelection.width > 0 && scaledSelection.height > 0) {
-          applyFillEffect(ctx, scaledSelection, fillMode, fillColor);
+          applyFillEffect(ctx, scaledSelection, fillMode, fillColor, fillImage);
         } else {
           console.warn('⚠️ 跳过填充：选区无效', scaledSelection);
         }
@@ -460,7 +462,8 @@ export function useVideoProcessing(): UseVideoProcessingReturn {
     ctx: CanvasRenderingContext2D,
     selection: Selection,
     fillMode: FillMode,
-    fillColor: string
+    fillColor: string,
+    fillImage: HTMLImageElement | null
   ) => {
     const { x, y, width, height } = selection;
 
@@ -501,11 +504,17 @@ export function useVideoProcessing(): UseVideoProcessingReturn {
         break;
 
       case 'image':
-        // 图片填充 - 暂时用纯色代替
-        console.log('执行图片填充（暂用纯色）');
-        ctx.fillStyle = fillColor;
-        ctx.fillRect(x, y, width, height);
-        console.log('✅ 图片填充完成（使用纯色）');
+        // 图片填充
+        console.log('执行图片填充');
+        if (fillImage) {
+          console.log('使用填充图片:', fillImage);
+          ctx.drawImage(fillImage, x, y, width, height);
+          console.log('✅ 图片填充完成');
+        } else {
+          console.warn('⚠️ 填充图片未提供，使用纯色填充');
+          ctx.fillStyle = fillColor;
+          ctx.fillRect(x, y, width, height);
+        }
         break;
 
       case 'smart':

@@ -35,6 +35,7 @@ export interface AppState {
   fillMode: FillMode;
   fillColor: string;
   fillImage: string | null;
+  fillImageElement: HTMLImageElement | null;
   videoInfo: VideoInfo | null;
   processState: ProcessState;
   processedVideoUrl: string | null;
