@@ -1,0 +1,248 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply bg-primary text-text min-h-screen antialiased;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  /* 背景网格 */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+@layer components {
+  /* 上传区域 */
+  .upload-zone {
+    @apply border-2 border-dashed border-border bg-gradient-to-br from-primary-secondary to-primary-tertiary;
+    @apply transition-all duration-300 rounded-2xl p-16 text-center cursor-pointer;
+    @apply relative overflow-hidden;
+  }
+
+  .upload-zone::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 bottom-0;
+    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  .upload-zone:hover {
+    @apply border-accent -translate-y-0.5;
+  }
+
+  .upload-zone:hover::before {
+    @apply opacity-100;
+  }
+
+  .upload-zone.dragging {
+    @apply border-accent;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+    @apply scale-[1.02];
+  }
+
+  /* 按钮样式 */
+  .btn-primary {
+    @apply bg-gradient-to-r from-accent to-accent-secondary text-primary font-semibold;
+    @apply py-3 px-6 rounded-lg transition-all duration-300 relative overflow-hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    @apply absolute top-0 left-[-100%] w-full h-full;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary:hover {
+    @apply -translate-y-0.5 shadow-lg shadow-accent/30;
+  }
+
+  .btn-secondary {
+    @apply bg-primary-tertiary border border-border text-text;
+    @apply py-3 px-6 rounded-lg transition-all duration-300;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-primary-secondary border-accent;
+  }
+
+  .btn-secondary:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* 输入框 */
+  .input-field {
+    @apply bg-primary-tertiary border border-border rounded-lg py-3 px-4 text-text;
+    @apply font-mono text-sm transition-all duration-300 w-full;
+  }
+
+  .input-field:focus {
+    @apply outline-none border-accent shadow-lg shadow-accent/10;
+  }
+
+  .input-field:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* 视频容器 */
+  .video-container {
+    @apply bg-primary-secondary border border-border rounded-xl relative overflow-hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* 防止图片拖动 */
+  .video-container img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+  }
+
+  /* 选区框 */
+  .selection-overlay {
+    @apply absolute border-2 border-accent bg-accent/10 cursor-move;
+    pointer-events: auto;
+    z-index: 10;
+  }
+
+  .selection-overlay * {
+    pointer-events: auto;
+  }
+
+  .selection-overlay::before,
+  .selection-overlay::after {
+    content: '';
+    @apply absolute w-5 h-5 border-2 border-accent;
+  }
+
+  .selection-overlay::before {
+    @apply top-[-2px] left-[-2px];
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .selection-overlay::after {
+    @apply bottom-[-2px] right-[-2px];
+    border-left: none;
+    border-top: none;
+  }
+
+  .resize-handle {
+    @apply absolute w-3 h-3 bg-accent rounded-sm;
+  }
+
+  .resize-handle.nw { @apply top-[-6px] left-[-6px] cursor-nw-resize; }
+  .resize-handle.ne { @apply top-[-6px] right-[-6px] cursor-ne-resize; }
+  .resize-handle.sw { @apply bottom-[-6px] left-[-6px] cursor-sw-resize; }
+  .resize-handle.se { @apply bottom-[-6px] right-[-6px] cursor-se-resize; }
+
+  /* 填充选项 */
+  .fill-option {
+    @apply bg-primary-tertiary border-2 border-transparent rounded-lg p-4;
+    @apply cursor-pointer transition-all duration-300 relative overflow-hidden;
+  }
+
+  .fill-option::before {
+    content: '';
+    @apply absolute top-0 left-0 w-1 h-full bg-accent transform scale-y-0 transition-transform duration-300;
+  }
+
+  .fill-option:hover {
+    @apply bg-primary-secondary;
+  }
+
+  .fill-option.active {
+    @apply border-accent bg-accent/5;
+  }
+
+  .fill-option.active::before {
+    @apply scale-y-100;
+  }
+
+  /* 进度条 */
+  .progress-bar {
+    @apply h-1 bg-primary-tertiary rounded-full overflow-hidden relative;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-accent to-success rounded-full;
+    @apply transition-all duration-300 relative;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    @apply absolute top-0 left-0 right-0 bottom-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-primary-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent;
+  }
+
+  /* 颜色选择器 */
+  .color-picker-wrapper {
+    @apply relative w-full h-12 rounded-lg overflow-hidden cursor-pointer;
+  }
+
+  .color-picker-wrapper input[type="color"] {
+    @apply absolute top-[-10px] left-[-10px];
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    @apply cursor-pointer border-none;
+  }
+
+  /* 对比视图 */
+  .comparison-item {
+    @apply relative bg-primary-secondary rounded-lg overflow-hidden;
+  }
+
+  .comparison-label {
+    @apply absolute bottom-3 left-3 bg-black/80 py-1.5 px-3 rounded text-xs font-semibold;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
