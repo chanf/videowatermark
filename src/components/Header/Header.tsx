@@ -12,6 +12,14 @@ export default function Header() {
           </span>
         </div>
         <div className="flex items-center gap-6">
+          <a
+            href="https://ps.909939.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-text-secondary hover:text-accent transition-colors duration-200"
+          >
+            图片处理
+          </a>
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <StatusDot />
             <span>系统就绪</span>
