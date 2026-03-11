@@ -13,28 +13,36 @@ export default function CompleteStage({
 }: CompleteStageProps) {
   return (
     <div className="flex-1 flex flex-col">
-      <div className="video-container flex-1 p-8 overflow-auto">
+      <div className="video-container flex-1 p-8 overflow-y-auto">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-8">
+          <div className="mb-6">
             <SuccessIcon />
           </div>
-          <h2 className="text-3xl font-bold mb-4">处理完成！</h2>
-          <p className="text-lg mb-8 text-text-secondary">
+          <h2 className="text-3xl font-bold mb-3">处理完成！</h2>
+          <p className="text-lg mb-6 text-text-secondary">
             您的新视频已准备就绪
           </p>
 
-          <div className="comparison-view grid grid-cols-2 gap-4 mb-8">
+          <div className="comparison-view grid grid-cols-2 gap-4 mb-6">
             <div className="comparison-item">
-              <img src={beforeImage} alt="处理前" className="w-full h-auto" />
+              <img
+                src={beforeImage}
+                alt="处理前"
+                className="w-full h-auto max-h-[40vh] object-contain rounded-lg border border-border"
+              />
               <div className="comparison-label">处理前</div>
             </div>
             <div className="comparison-item">
-              <img src={afterImage} alt="处理后" className="w-full h-auto" />
+              <img
+                src={afterImage}
+                alt="处理后"
+                className="w-full h-auto max-h-[40vh] object-contain rounded-lg border border-border"
+              />
               <div className="comparison-label">处理后</div>
             </div>
           </div>
 
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center pb-4">
             <button className="btn-primary text-lg px-8 py-4" onClick={onDownload}>
               <span className="flex items-center gap-2">
                 <DownloadIcon />
